@@ -2,7 +2,7 @@ from pyspark.conf import SparkConf
 from pyspark.sql import SparkSession
 
 _conf = SparkConf()
-# _conf.setAppName("DEDUPLICATES")
+# _conf.setAppName("DEDUPLICATE")
 
 builder = SparkSession. \
     builder. \
