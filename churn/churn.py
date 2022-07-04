@@ -77,7 +77,7 @@ df = df.select(to_json(struct("MSISDN", "IMSI", "_DATE",
 df.writeStream \
     .format("kafka") \
     .option("kafka.bootstrap.servers", "kafka1:9092,kafka2:9092,kafka3:9092") \
-    .option("checkpointLocation", "hdfs://172.17.135.31:9000/Checkpoints/churn_result") \
+    .option("checkpointLocation", "hdfs://master:9000/Checkpoints/churn_result") \
     .outputMode("update") \
     .option("topic", "churn_result") \
     .start() \

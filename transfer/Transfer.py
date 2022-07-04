@@ -1,8 +1,6 @@
-from pyspark.sql import SparkSession
-from pyspark import SparkConf
-from pyspark.sql.functions import *
-from pyspark.sql.types import *
 from pyspark.conf import SparkConf
+from pyspark.sql import SparkSession
+
 _conf = SparkConf()
 # _conf.setAppName("DEDUPLICATE")
 
@@ -37,7 +35,7 @@ df_final = session \
 df_final.writeStream \
     .format("kafka")\
     .option("kafka.bootstrap.servers", "kafka1:9092,kafka2:9092,kafka3:9092")\
-    .option("checkpointLocation", "hdfs://172.17.135.31:9000/Checkpoints/jusfdtTransfersdf")\
+    .option("checkpointLocation", "hdfs://master:9000/Checkpoints/transfer")\
     .outputMode("append")\
     .option("topic", "fake")\
     .start()\
