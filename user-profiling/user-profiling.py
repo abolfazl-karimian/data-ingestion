@@ -8,9 +8,9 @@ _conf.setAppName("CHURN_RESULT")
 _conf.set("spark.sql.streaming.stateStore.providerClass",
           "org.apache.spark.sql.execution.streaming.state.RocksDBStateStoreProvider")
 
-builder = SparkSession. \
-    builder. \
-    config(conf=_conf) \
+builder = SparkSession \
+    .builder \
+    .config(conf=_conf) \
     .config('spark.jars.packages', 'org.apache.spark:spark-sql- kafka-0-10_2.12:3.1.0')
 session = builder.getOrCreate()
 session.sparkContext.setLogLevel("WARN")
@@ -21,21 +21,21 @@ df = session \
     .option("kafka.bootstrap.servers", "kafka1:9092,kafka2:9092,kafka3:9092") \
     .option("subscribe", "fake") \
     .option("startingOffsets", "earliest") \
-    .option("maxOffsetsPerTrigger", 10000000) \
+    .option("maxOffsetsPerTrigger", 7000000) \
     .load() \
     .selectExpr("CAST(value AS STRING)")
 
-fileSchema = (StructType()
-              .add(StructField("MSISDN", StringType()))
-              .add(StructField("CALL_PARTNER", StringType()))
-              .add(StructField("DURATION", IntegerType()))
-              .add(StructField("CDR_TYPE", StringType()))
-              .add(StructField("IMSI", StringType()))
-              .add(StructField("SEQ_NO", IntegerType()))
-              .add(StructField("RECORD_DATE", TimestampType()))
-              )
+schema = (StructType()
+          .add(StructField("MSISDN", StringType()))
+          .add(StructField("CALL_PARTNER", StringType()))
+          .add(StructField("DURATION", IntegerType()))
+          .add(StructField("CDR_TYPE", StringType()))
+          .add(StructField("IMSI", StringType()))
+          .add(StructField("SEQ_NO", IntegerType()))
+          .add(StructField("RECORD_DATE", TimestampType()))
+          )
 
-df = df.select(from_json(col("value"), fileSchema).alias("data")).select("data.*")
+df = df.select(from_json(col("value"), schema).alias("data")).select("data.*")
 
 df = df \
     .withColumn("duration1", when(col("CDR_TYPE") == "1", col("DURATION")).otherwise(lit(0))) \
