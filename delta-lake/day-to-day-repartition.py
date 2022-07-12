@@ -1,7 +1,7 @@
 from pyspark.sql.functions import *
 from pyspark.conf import SparkConf
 _conf = SparkConf()
-_conf.setAppName("SP_TEST")
+_conf.setAppName("SP_Delta")
 from pyspark.sql import SparkSession
 from delta import *
 builder = SparkSession. \
